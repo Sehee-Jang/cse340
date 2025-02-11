@@ -2,5 +2,343 @@
 *,
 *:before,
 *:after {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+ul {
+  list-style-type: none;
+}
+.bold {
+  font-weight: bold;
+}
+
+#top-header {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.siteName {
+  font-size: 30px;
+  font-weight: bold;
+}
+nav ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2f2f48;
+  height: 40px;
+  color: #fff;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+nav ul a {
+  color: white;
+}
+
+.welcome-section {
+  text-align: center;
+  padding: 2rem;
+}
+
+.delorean-info {
+  margin-bottom: 1rem;
+  background: url("../images/vehicles/delorean-tn.jpg") no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  position: relative;
+  padding: 2rem;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+.delorean-content {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  color: #0b46bd;
+}
+
+.delorean-content ul {
+  margin-bottom: 1rem;
+}
+.btn-primary {
+  padding: 1rem;
+  background-color: #4bb6e7;
+}
+.content-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.upgrades,
+.reviews {
+  text-align: center;
+}
+
+.upgrades h3,
+.reviews h3 {
+  font-size: 24px;
+  margin-bottom: 1rem;
+}
+.reviews ul {
+  list-style: disc;
+  text-align: left;
+}
+.reviews ul li {
+  margin-bottom: 1rem;
+}
+
+.upgrade-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.upgrade-itmes-img {
+  width: 150px;
+  height: 100px;
+  text-align: center;
+  align-content: center;
+  background-color: #0b46bd;
+  border: 2px solid #333;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #f4f4f4;
+  font-size: 0.9rem;
+}
+
+.vehicle-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vehicle-detail img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.vehicle-info {
+  width: 100%;
+  max-width: 600px;
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.vehicle-info p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.vehicle-info strong {
+  color: #0b46bd;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background-color: #0b46bd;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0940a3;
+}
+
+/* Error */
+.error-container,
+.content-container {
+  text-align: center;
+  padding: 50px;
+}
+
+/* Login */
+.login-form {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.login-form label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-form button,
+.register-form button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-form button:hover,
+.register-form button:hover {
+  background-color: #0056b3;
+}
+
+.flash-message {
+  color: red;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Example styles for registration form */
+.register-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.register-form label {
+  display: block;
+  margin: 8px 0 4px;
+  text-align: left;
+}
+
+.register-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.register-form .password-requirements {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.password-requirements p {
+  font-weight: bold;
+  margin: 0 0 5px;
+}
+
+.password-requirements ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.password-requirements li {
+  margin: 5px 0;
+}
+
+input:invalid {
+  border-color: red;
+}
+
+input:valid {
+  border-color: green;
+}
+
+/* Larger Screens (768px and above) */
+@media (min-width: 768px) {
+  header {
+    text-align: left;
+  }
+
+  .header-container {
+    justify-content: space-between;
+    padding: 0 2rem;
+  }
+
+  .delorean-info {
+    background-image: url("../images/vehicles/delorean.jpg");
+  }
+
+  .content-section {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .upgrades,
+  .reviews {
+    width: 45%;
+  }
+
+  .vehicle-detail {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .vehicle-detail img {
+    width: 50%;
+  }
+
+  .vehicle-info {
+    width: 50%;
+  }
 }
