@@ -6,6 +6,7 @@ const Util = {};
  ************************** */
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications();
+  console.log("data: ", data);
   let list = "<ul>";
   list += '<li><a href="/" title="Home page">Home</a></li>';
   data.rows.forEach((row) => {
@@ -75,6 +76,28 @@ Util.buildClassificationGrid = async function (data) {
     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
   }
   return grid;
+};
+
+/* ****************************************
+ * Build the item detail view HTML
+ * **************************************** */
+Util.buildItemDetailView = function (vehicle) {
+  if (!vehicle) {
+    return '<p class="notice">Vehicle not found.</p>';
+  }
+
+  let detailView = '<div class="vehicle-detail">';
+  detailView += `<img src="${vehicle.inv_thumbnail}" alt="Image of ${vehicle.inv_make} ${vehicle.inv_model}" />`;
+  detailView += "<h2>" + vehicle.inv_make + " " + vehicle.inv_model + "</h2>";
+  detailView +=
+    "<p><strong>Price:</strong> $" +
+    new Intl.NumberFormat("en-US").format(vehicle.inv_price) +
+    "</p>";
+  detailView +=
+    "<p><strong>Description:</strong> " + vehicle.inv_description + "</p>";
+  detailView += "</div>";
+
+  return detailView;
 };
 
 /* ****************************************
