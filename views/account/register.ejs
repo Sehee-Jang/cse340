@@ -13,7 +13,13 @@
     <input type="text" id="account_lastname" name="account_lastname" required />
 
     <label for="account_email">Email</label>
-    <input type="email" name="account_email" id="account_email" required />
+    <input
+      type="email"
+      id="account_email"
+      name="account_email"
+      placeholder="Enter a valid email address"
+      required
+    />
 
     <label for="account_password">Password</label>
     <input
@@ -21,8 +27,8 @@
       name="account_password"
       id="account_password"
       required
-      required
-      minlength="12"
+      pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+      title="Password must be at least 12 characters long, contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character."
     />
 
     <button type="button" onclick="togglePassword()">Show/Hide Password</button>
