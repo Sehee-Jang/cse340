@@ -2,16 +2,20 @@ const express = require("express");
 const router = express.Router();
 const accountController = require("../controllers/accountController");
 const Util = require("../utilities");
+const regValidate = require("../utilities/account-validation");
 
 // Route to build login view
-// router.get("/", Util.handleErrors(accountController.buildLogin));
 router.get("/login", Util.handleErrors(accountController.buildLogin));
 
 // Route to build registration view
 router.get("/register", Util.handleErrors(accountController.buildRegister));
 
 // Route to register account
-router.post("/register", Util.handleErrors(accountController.registerAccount));
-
+router.post(
+  "/register",
+  regValidate.registationRules(),
+  regValidate.checkRegData,
+  Util.handleErrors(accountController.registerAccount)
+);
 
 module.exports = router;
