@@ -61,4 +61,127 @@ invCont.getItemDetail = async function (req, res, next) {
   }
 };
 
+/* ***************************
+ *  Build inventory management view
+ * ************************** */
+invCont.buildInventoryManagement = async function (req, res, next) {
+  let nav = await Util.getNav();
+
+  res.render("inventory/management", {
+    title: "Inventory Management",
+    nav,
+    message: req.flash("message"), // 플래시 메시지
+  });
+};
+
+/* ***************************
+ *  Build add classfication view
+ * ************************** */
+invCont.addClassificationView = async (req, res) => {
+  let nav = await Util.getNav();
+  res.render("inventory/add-classification", {
+    title: "Add New Classification",
+    nav,
+    message: req.flash("info") || [],
+  });
+};
+
+/* ***************************
+ *  Add Classification
+ * ************************** */
+invCont.addClassification = async (req, res) => {
+  const { classification_name } = req.body;
+
+  // 서버 측 유효성 검사
+  if (!classification_name || /[^a-zA-Z0-9]/.test(classification_name)) {
+    req.flash("message", "Classification name is invalid.");
+    return res.redirect("/inv/add-classification");
+  }
+
+  // 분류 추가 함수 호출
+  const result = await invModel.addClassification(classification_name);
+
+  if (result) {
+    req.flash("message", "New classification added successfully.");
+    res.redirect("/inv");
+  } else {
+    req.flash("message", "Failed to add classification.");
+    res.redirect("/inv/add-classification");
+  }
+};
+
+/* ***************************
+ *  Add Inventory View
+ * ************************** */
+invCont.addInventoryView = async (req, res) => {
+  let nav = await Util.getNav();
+  try {
+    const classificationList = await Util.buildClassificationList();
+    console.log("📍classificationList :", classificationList);
+    res.render("inventory/add-inventory", {
+      title: "Add New Inventory Item",
+      nav,
+      classificationList,
+      message: req.flash("info") || [],
+    });
+  } catch (error) {
+    console.error(error);
+    req.flash("info", "Error loading classifications.");
+    res.redirect("/inv/");
+  }
+};
+/* ***************************
+ *  Add Inventory
+ * ************************** */
+invCont.addInventory = async (req, res) => {
+  const {
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_miles,
+    inv_color,
+    classification_id,
+  } = req.body;
+
+  // 서버 측 유효성 검사
+  if (
+    !inv_make ||
+    !inv_model ||
+    !inv_year ||
+    !inv_description ||
+    !inv_price ||
+    !inv_miles ||
+    !inv_color ||
+    !classification_id
+  ) {
+    req.flash("message", "All fields are required.");
+    return res.redirect("/inv/add-inventory");
+  }
+
+  const result = await invModel.addInventoryItem({
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_miles,
+    inv_color,
+    classification_id,
+  });
+
+  if (result) {
+    req.flash("message", "New inventory item added successfully.");
+    res.redirect("/inv");
+  } else {
+    req.flash("message", "Failed to add inventory item.");
+    res.redirect("/inv/add-inventory");
+  }
+};
+
 module.exports = invCont;

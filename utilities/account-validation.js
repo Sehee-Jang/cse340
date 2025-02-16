@@ -23,7 +23,7 @@ validate.registationRules = () => {
       .notEmpty()
       .isLength({ min: 2 })
       .withMessage("Please provide a last name."), // on error this message is sent.
-
+    
     // valid email is required and cannot already exist in the database
     body("account_email")
       .trim()
