@@ -91,3 +91,37 @@
   background-color: #f8d7da; /* Light red background */
   border-radius: 5px; /* Rounded corners for the notice */
 }
+
+/* 테이블 스타일 */
+#inventoryDisplay {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table-header {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+#inventoryDisplay th,
+#inventoryDisplay td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.inventory-row:hover {
+  background-color: #f9f9f9;
+}
+
+.action-link {
+  color: #007bff;
+  text-decoration: none;
+  padding: 5px;
+}
+
+.action-link:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}

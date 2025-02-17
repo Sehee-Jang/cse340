@@ -67,10 +67,13 @@ invCont.getItemDetail = async function (req, res, next) {
 invCont.buildInventoryManagement = async function (req, res, next) {
   let nav = await Util.getNav();
 
+  const classificationList = await Util.buildClassificationList();
+
   res.render("inventory/management", {
     title: "Inventory Management",
     nav,
-    message: req.flash("message"), // 플래시 메시지
+    message: req.flash("message"),
+    classificationList,
   });
 };
 
@@ -181,6 +184,21 @@ invCont.addInventory = async (req, res) => {
   } else {
     req.flash("message", "Failed to add inventory item.");
     res.redirect("/inv/add-inventory");
+  }
+};
+
+/* ***************************
+ *  Return Inventory by Classification As JSON
+ * ************************** */
+invCont.getInventoryJSON = async (req, res, next) => {
+  const classification_id = parseInt(req.params.classification_id);
+  const invData = await invModel.getInventoryByClassificationId(
+    classification_id
+  );
+  if (invData[0].inv_id) {
+    return res.json(invData);
+  } else {
+    next(new Error("No data returned"));
   }
 };
 

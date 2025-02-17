@@ -22,4 +22,10 @@ router.post("/add-classification", invController.addClassification);
 router.get("/add-inventory", invController.addInventoryView);
 router.post("/add-inventory", invController.addInventory);
 
+// 특정 분류에 맞는 차량 목록 반환
+router.get(
+  "/getInventory/:classification_id",
+  Util.handleErrors(invController.getInventoryJSON)
+);
+
 module.exports = router;

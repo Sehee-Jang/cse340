@@ -1,5 +1,4 @@
 <h1>Inventory Management</h1>
-<!-- <p>Select a classification to view inventory items.</p> -->
 
 <% if (message) { %>
 <div class="flash-message"><%= message %></div>
@@ -12,4 +11,17 @@
   <a href="/inv/add-inventory" class="button">Add New Inventory</a>
 </div>
 
+<h2>Manage Inventory</h2>
+<p>Select a classification to view inventory items.</p>
+
+<%- classificationList %>
+
+<!-- 차량 목록을 표시할 테이블 -->
+<table id="inventoryDisplay">
+  <!-- JavaScript로 이곳에 차량 데이터를 삽입할 예정입니다. -->
+</table>
+
+<noscript>JavaScript must be enabled to use this page.</noscript>
+
 <script src="/js/inventory.js" defer></script>
+ <link rel="stylesheet" href="../../css/inventory.css" />
