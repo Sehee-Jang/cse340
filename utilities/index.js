@@ -144,15 +144,32 @@ Util.checkJWTToken = (req, res, next) => {
         if (err) {
           req.flash("Please log in");
           res.clearCookie("jwt");
+          res.locals.loggedin = 0;
           return res.redirect("/account/login");
         }
         res.locals.accountData = accountData;
         res.locals.loggedin = 1;
+        console.log("✅ JWT 검증 성공, 로그인 상태 유지:", res.locals.loggedin);
         next();
       }
     );
   } else {
+    res.locals.loggedin = 0;
     next();
+  }
+};
+
+/* ****************************************
+ *  Check Login
+ * ************************************ */
+Util.checkLogin = (req, res, next) => {
+  if (res.locals.loggedin) {
+    console.log("✅ 로그인 상태 확인됨");
+    next();
+  } else {
+    console.log("❌ 로그인 상태 아님");
+    req.flash("notice", "Please log in.");
+    return res.redirect("/account/login");
   }
 };
 

@@ -11,7 +11,11 @@ router.get("/login", Util.handleErrors(accountController.buildLogin));
 router.get("/register", Util.handleErrors(accountController.buildRegister));
 
 // Route to display account dashboard after login
-router.get("/", Util.handleErrors(accountController.accountDashboard));
+router.get(
+  "/",
+  Util.checkJWTToken,
+  Util.handleErrors(accountController.buildManagement)
+);
 
 // Route to register account
 router.post(

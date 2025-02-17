@@ -141,7 +141,7 @@ async function accountLogin(req, res) {
   }
 }
 
-async function accountDashboard(req, res) {
+async function buildManagement(req, res) {
   let nav = await Util.getNav();
   console.log("✅ 계정 페이지 접근:", req.session.user);
 
@@ -151,8 +151,9 @@ async function accountDashboard(req, res) {
   }
   const message = req.flash("message")[0] || "";
 
+  
   res.render("account/account", {
-    title: "Your Account",
+    title: "Hello",
     nav,
     message,
     user: req.session.user,
@@ -164,5 +165,5 @@ module.exports = {
   buildRegister,
   registerAccount,
   accountLogin,
-  accountDashboard,
+  buildManagement,
 };
