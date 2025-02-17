@@ -174,9 +174,11 @@ footer {
   display: flex;
   justify-content: center;
   margin: 2rem 0;
+  gap: 2rem;
 }
 
 .button {
+  cursor: pointer;
   display: inline-block;
   padding: 1rem 2rem;
   background-color: #0b46bd;

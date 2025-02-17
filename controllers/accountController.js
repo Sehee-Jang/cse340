@@ -1,15 +1,23 @@
 const Util = require("../utilities");
 const accountModel = require("../models/account-model");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
 /* ****************************************
  *  Build Login View
  * *************************************** */
 async function buildLogin(req, res, next) {
-  let nav = await Util.getNav();
-  res.render("account/login", {
-    title: "Login",
-    nav,
-  });
+  try {
+    let nav = await Util.getNav();
+    res.render("account/login", {
+      title: "Login",
+      nav,
+    });
+  } catch (error) {
+    console.error("Error rendering login page: ", error);
+    res.status(500).send("Internal Server Error");
+  }
 }
 
 /* ****************************************
@@ -78,4 +86,83 @@ async function registerAccount(req, res) {
   }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount };
+/* ****************************************
+ *  Process login request
+ * ************************************ */
+async function accountLogin(req, res) {
+  console.log("📍 Attempt Login");
+  let nav = await Util.getNav();
+  const { account_email, account_password } = req.body;
+  const accountData = await accountModel.getAccountByEmail(account_email);
+
+  if (!accountData) {
+    req.flash("notice", "Please check your credentials and try again.");
+    res.status(400).render("account/login", {
+      title: "Login",
+      nav,
+      errors: null,
+      account_email,
+    });
+    return;
+  }
+
+  try {
+    if (await bcrypt.compare(account_password, accountData.account_password)) {
+      delete accountData.account_password;
+      const accessToken = jwt.sign(
+        accountData,
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: 3600 * 1000 }
+      );
+      if (process.env.NODE_ENV === "development") {
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+      } else {
+        res.cookie("jwt", accessToken, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 3600 * 1000,
+        });
+      }
+      req.session.user = accountData;
+      console.log("✅ 로그인 성공:", req.session.user);
+
+      return res.redirect("/account/");
+    } else {
+      req.flash("message", "Please check your credentials and try again.");
+      res.status(400).render("account/login", {
+        title: "Login",
+        nav,
+        errors: null,
+        account_email,
+      });
+    }
+  } catch (error) {
+    throw new Error("Access Forbidden");
+  }
+}
+
+async function accountDashboard(req, res) {
+  let nav = await Util.getNav();
+  console.log("✅ 계정 페이지 접근:", req.session.user);
+
+  if (!req.session.user) {
+    console.log("No session - Redirecting to login page");
+    return res.redirect("account/login");
+  }
+  const message = req.flash("message")[0] || "";
+
+  res.render("account/account", {
+    title: "Your Account",
+    nav,
+    message,
+    user: req.session.user,
+  });
+}
+
+module.exports = {
+  buildLogin,
+  buildRegister,
+  registerAccount,
+  accountLogin,
+  accountDashboard,
+};

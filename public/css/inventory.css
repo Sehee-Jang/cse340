@@ -1,0 +1,93 @@
+/* Grid layout for the inventory list */
+#inv-display {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(300px, 1fr)
+  ); /* Create flexible columns that adjust based on screen size */
+  gap: 20px;
+  padding: 20px;
+  list-style-type: none;
+  margin: 0;
+}
+
+/* Individual list item styling */
+#inv-display li {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+/* Hover effect for list items */
+#inv-display li:hover {
+  transform: translateY(-10px); /* Lift the item up when hovered */
+}
+
+#inv-display li a {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 비율 */
+}
+
+/* Image styling inside each list item */
+#inv-display li img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-bottom: 2px solid #eee;
+}
+
+/* Styling for name and price section inside each item */
+.namePrice {
+  padding: 15px;
+}
+
+/* Title styling inside the namePrice section */
+.namePrice h2 {
+  font-size: 1.2em; /* Increase font size for the title */
+  margin: 0;
+  color: #333; /* Dark text color */
+}
+
+/* Link styling for the vehicle name */
+.namePrice h2 a {
+  color: #007bff; /* Blue color for the link */
+  text-decoration: none; /* Remove underline */
+}
+
+/* Hover effect for the vehicle name link */
+.namePrice h2 a:hover {
+  text-decoration: underline; /* Add underline on hover */
+}
+
+/* Price styling inside the namePrice section */
+.namePrice span {
+  display: block; /* Make price appear on a new line */
+  font-size: 1.1em; /* Slightly larger font size for price */
+  color: #333; /* Dark text color */
+  margin-top: 10px; /* Space between price and name */
+}
+
+/* Horizontal rule styling */
+.namePrice hr {
+  border: 0;
+  border-top: 1px solid #eee; /* Light grey line */
+  margin: 10px 0; /* Space around the line */
+}
+
+/* Styling for the 'no matching vehicles' notice */
+.notice {
+  color: #d9534f; /* Red color for the notice */
+  font-size: 1.1em; /* Slightly larger font for the notice */
+  text-align: center; /* Center align the text */
+  padding: 20px; /* Add padding around the notice */
+  background-color: #f8d7da; /* Light red background */
+  border-radius: 5px; /* Rounded corners for the notice */
+}

@@ -1,30 +1,31 @@
 const pool = require("../database/index");
 
 /* *****************************
-*   Register new account
-* *************************** */
+ *   Register new account
+ * *************************** */
 async function registerAccount(
-    account_firstname,
-    account_lastname,
-    account_email,
-    account_password) {
+  account_firstname,
+  account_lastname,
+  account_email,
+  account_password
+) {
   try {
-      const sql =
-          "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *"
-      return await pool.query(sql, [
-          account_firstname,
-          account_lastname,
-          account_email,
-          account_password
-      ])
+    const sql =
+      "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *";
+    return await pool.query(sql, [
+      account_firstname,
+      account_lastname,
+      account_email,
+      account_password,
+    ]);
   } catch (error) {
-    return error.message
+    return error.message;
   }
 }
 
 /* *****************************
-*   Check exist email address
-* *************************** */
+ *   Check exist email address
+ * *************************** */
 async function checkExistingEmail(account_email) {
   try {
     const sql = "SELECT * FROM account WHERE account_email = $1";
@@ -34,4 +35,20 @@ async function checkExistingEmail(account_email) {
     return error.message;
   }
 }
-module.exports = { registerAccount, checkExistingEmail };
+
+/* *****************************
+ * Return account data using email address
+ * ***************************** */
+async function getAccountByEmail(account_email) {
+  try {
+    const result = await pool.query(
+      "SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_email = $1",
+      [account_email]
+    );
+    return result.rows[0];
+  } catch (error) {
+    return new Error("No matching email found");
+  }
+}
+
+module.exports = { registerAccount, checkExistingEmail, getAccountByEmail };
