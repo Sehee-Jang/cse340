@@ -178,6 +178,7 @@ footer {
 }
 
 .button {
+  border: none;
   cursor: pointer;
   display: inline-block;
   padding: 1rem 2rem;
@@ -187,7 +188,7 @@ footer {
   font-weight: bold;
   border-radius: 5px;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   transition: background-color 0.3s ease;
 }
 
@@ -310,13 +311,16 @@ input:valid {
  *  Form Style
  * ************************** */
 form {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 600px;
-  margin: 20px;
+  margin: 20px auto;
 }
 
 form h2 {
@@ -370,6 +374,14 @@ select:invalid + .error-message {
   margin-top: 5px;
 }
 
+textarea {
+  width: 100%;
+  min-height: 3rem;
+}
+
+.btn {
+  margin: 1rem auto;
+}
 /* Larger Screens (768px and above) */
 @media (min-width: 768px) {
   header {

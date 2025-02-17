@@ -16,9 +16,13 @@
   <label for="image">Image:</label>
   <input type="file" id="image" name="image" />
 
-  <button type="submit">Add Inventory</button>
+  <div class="btn">
+    <button type="submit" class="button">Add Inventory</button>
+  </div>
 </form>
+
 <a href="/inv/">Back to Inventory Management</a>
+
 <% if (message) { %>
 <div class="flash-message"><%= message %></div>
 <% } %>

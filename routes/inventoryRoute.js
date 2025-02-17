@@ -28,4 +28,7 @@ router.get(
   Util.handleErrors(invController.getInventoryJSON)
 );
 
+// Route to display edit inventory view
+router.get("/edit/:inv_id", invController.editInventoryView);
+
 module.exports = router;

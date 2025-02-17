@@ -95,6 +95,42 @@ async function addInventoryItem(newData) {
   }
 }
 
+/* ***************************
+ *  Update inventory item
+ * ************************** */
+async function updateInventoryItem(inv_id, updatedData) {
+  const query = `
+    UPDATE public.inventory
+    SET inv_make = $1, inv_model = $2, inv_year = $3, inv_description = $4, 
+        inv_image = $5, inv_thumbnail = $6, inv_price = $7, inv_miles = $8, 
+        inv_color = $9, classification_id = $10
+    WHERE inv_id = $11
+    RETURNING *;
+  `;
+
+  const values = [
+    updatedData.inv_make,
+    updatedData.inv_model,
+    updatedData.inv_year,
+    updatedData.inv_description,
+    updatedData.inv_image,
+    updatedData.inv_thumbnail,
+    updatedData.inv_price,
+    updatedData.inv_miles,
+    updatedData.inv_color,
+    updatedData.classification_id,
+    inv_id,
+  ];
+
+  try {
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error updating inventory item:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
