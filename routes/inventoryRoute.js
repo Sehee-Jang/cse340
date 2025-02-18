@@ -31,12 +31,16 @@ router.get(
 
 // Route to display edit inventory view
 router.get("/edit/:inv_id", invController.editInventoryView);
-// router.post("/update", invController.updateInventory);
 router.post(
   "/update",
   invValidation.checkUpdateData,
   invController.updateInventory
 );
 
+// Route to display delete confirm view
+router.get("/delete/:inv_id", invController.getDeleteConfirmView);
+
+// 삭제 처리 (POST)
+router.post("/delete", invController.deleteInventoryItem);
 
 module.exports = router;

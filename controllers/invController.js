@@ -268,7 +268,10 @@ invCont.updateInventory = async function (req, res, next) {
   );
 
   if (updateResult) {
-    req.flash("notice", `The ${inv_make} ${inv_model} was successfully updated.`);
+    req.flash(
+      "notice",
+      `The ${inv_make} ${inv_model} was successfully updated.`
+    );
     res.redirect("/inv/");
   } else {
     req.flash("notice", "Sorry, the update failed.");
@@ -286,10 +289,49 @@ invCont.updateInventory = async function (req, res, next) {
       inv_year,
       inv_miles,
       inv_color,
-      classification_id
+      classification_id,
     });
   }
 };
 
+/* ***************************
+ *  Build delete inventory view
+ * ************************** */
+invCont.getDeleteConfirmView = async function (req, res, next) {
+  let nav = await Util.getNav();
+  try {
+    const inv_id = parseInt(req.params.inv_id);
+    const inventory = await invModel.getVehicleById(inv_id);
 
+    res.render("inventory/delete-confirm", {
+      title: "Delete Inventory Item",
+      nav,
+      inventory,
+    });
+  } catch (error) {
+    console.error("Error loading delete confirmation view:", error);
+    res.status(500).send("Server Error");
+  }
+};
+
+/* ***************************
+ *  Delete Inventory Data
+ * ************************** */
+invCont.deleteInventoryItem = async function (req, res, next) {
+  try {
+    const inv_id = parseInt(req.body.inv_id);
+    const result = await invModel.deleteInventoryItem(inv_id);
+
+    if (result.rowCount > 0) {
+      req.flash("success", "Inventory item deleted successfully.");
+      res.redirect("/inv");
+    } else {
+      req.flash("error", "Failed to delete inventory item.");
+      res.redirect(`/inv/delete/${inv_id}`);
+    }
+  } catch (error) {
+    console.error("Error deleting inventory item:", error);
+    res.status(500).send("Server Error");
+  }
+};
 module.exports = invCont;
