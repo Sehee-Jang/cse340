@@ -234,4 +234,62 @@ invCont.editInventoryView = async function (req, res, next) {
   });
 };
 
+/* ***************************
+ *  Update Inventory Data
+ * ************************** */
+invCont.updateInventory = async function (req, res, next) {
+  let nav = await Util.getNav();
+  const {
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+    classification_id,
+  } = req.body;
+
+  const updateResult = await invModel.updateInventoryItem(
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+    classification_id
+  );
+
+  if (updateResult) {
+    req.flash("notice", `The ${inv_make} ${inv_model} was successfully updated.`);
+    res.redirect("/inv/");
+  } else {
+    req.flash("notice", "Sorry, the update failed.");
+    res.status(501).render("inventory/edit-inventory", {
+      title: "Edit " + inv_make + " " + inv_model,
+      nav,
+      errors: req.flash("notice"),
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+      classification_id
+    });
+  }
+};
+
+
 module.exports = invCont;

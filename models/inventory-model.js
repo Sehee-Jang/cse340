@@ -96,40 +96,50 @@ async function addInventoryItem(newData) {
 }
 
 /* ***************************
- *  Update inventory item
+ *  Update Inventory Data
  * ************************** */
-async function updateInventoryItem(inv_id, updatedData) {
-  const query = `
-    UPDATE public.inventory
-    SET inv_make = $1, inv_model = $2, inv_year = $3, inv_description = $4, 
-        inv_image = $5, inv_thumbnail = $6, inv_price = $7, inv_miles = $8, 
-        inv_color = $9, classification_id = $10
-    WHERE inv_id = $11
-    RETURNING *;
-  `;
-
-  const values = [
-    updatedData.inv_make,
-    updatedData.inv_model,
-    updatedData.inv_year,
-    updatedData.inv_description,
-    updatedData.inv_image,
-    updatedData.inv_thumbnail,
-    updatedData.inv_price,
-    updatedData.inv_miles,
-    updatedData.inv_color,
-    updatedData.classification_id,
-    inv_id,
-  ];
-
+async function updateInventoryItem(
+  inv_id,
+  inv_make,
+  inv_model,
+  inv_description,
+  inv_image,
+  inv_thumbnail,
+  inv_price,
+  inv_year,
+  inv_miles,
+  inv_color,
+  classification_id
+) {
   try {
-    const result = await pool.query(query, values);
-    return result.rows[0];
+    const sql = `
+      UPDATE public.inventory 
+      SET inv_make = $1, inv_model = $2, inv_description = $3, 
+      inv_image = $4, inv_thumbnail = $5, inv_price = $6, 
+      inv_year = $7, inv_miles = $8, inv_color = $9, classification_id = $10 
+      WHERE inv_id = $11 
+      RETURNING *`;
+
+    const data = await pool.query(sql, [
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+      classification_id,
+      inv_id,
+    ]);
+
+    return data.rows[0];
   } catch (error) {
-    console.error("Error updating inventory item:", error);
-    throw error;
+    console.error("model error: " + error);
   }
 }
+
 
 module.exports = {
   getClassifications,
@@ -137,4 +147,5 @@ module.exports = {
   getVehicleById,
   addClassification,
   addInventoryItem,
+  updateInventoryItem,
 };
