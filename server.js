@@ -18,6 +18,7 @@ const utilities = require("./utilities/index");
 const accountRoute = require("./routes/accountRoute");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const checkLogin = require("./utilities");
 
 /* ***********************
  * View Engine and Templates
@@ -41,6 +42,11 @@ app.use(
     name: "sessionId",
   })
 );
+
+app.use((req, res, next) => {
+  res.locals.session = req.session;
+  next();
+});
 
 // Express Messages Middleware
 app.use(require("connect-flash")());
@@ -66,7 +72,7 @@ app.use("/account", accountRoute);
 app.get("/", utilities.handleErrors(baseController.buildHome));
 
 // Inventory routes
-app.use("/inv", inventoryRoute);
+app.use("/inv", utilities.checkAdminOrEmployee, inventoryRoute);
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
   next({ status: 404, message: "Sorry, we appear to have lost that page." });

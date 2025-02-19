@@ -1,0 +1,69 @@
+<% if (errors) { %>
+<div class="error-message"><%= errors %></div>
+<% } %> <% if (message) { %>
+<div class="flash-message"><%= message %></div>
+<% } %>
+
+<h1>Update Account Information</h1>
+
+<!-- Account Update Form -->
+<form action="/account/update" method="POST">
+  <fieldset>
+    <legend>Account Update</legend>
+
+    <label for="account_firstname">First Name:</label>
+    <input
+      type="text"
+      id="account_firstname"
+      name="account_firstname"
+      required
+      value="<%= user.account_firstname %>"
+    />
+
+    <label for="account_lastname">Last Name:</label>
+    <input
+      type="text"
+      id="account_lastname"
+      name="account_lastname"
+      required
+      value="<%= user.account_lastname %>"
+    />
+
+    <label for="account_email">Email:</label>
+    <input
+      type="email"
+      id="account_email"
+      name="account_email"
+      required
+      value="<%= user.account_email %>"
+    />
+
+    <!-- Hidden Field for Account ID -->
+    <input type="hidden" name="account_id" value="<%= user.account_id %>" />
+
+    <button type="submit">Update Account</button>
+  </fieldset>
+</form>
+
+<!-- Change Password Form -->
+<form action="/accounts/change-password" method="POST">
+  <fieldset>
+    <legend>Change Password</legend>
+
+    <label for="new_password">New Password:</label>
+    <input
+      type="password"
+      id="new_password"
+      name="new_password"
+      required
+      minlength="8"
+    />
+
+    <p>Password must be at least 8 characters long.</p>
+
+    <!-- Hidden Field for Account ID -->
+    <input type="hidden" name="account_id" value="<%= user.account_id %>" />
+
+    <button type="submit">Change Password</button>
+  </fieldset>
+</form>

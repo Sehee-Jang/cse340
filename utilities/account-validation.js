@@ -54,6 +54,46 @@ validate.registationRules = () => {
   ];
 };
 
+validate.validateUpdate = [
+  body("account_firstname").notEmpty().withMessage("First name is required."),
+  body("account_lastname").notEmpty().withMessage("Last name is required."),
+  body("account_email").isEmail().withMessage("Valid email is required."),
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      let nav = await utilities.getNav();
+      res.render("account/update", {
+        errors,
+        title: "Update Account",
+        nav,
+        ...req.body,
+      });
+      return;
+    }
+    next();
+  },
+];
+
+validate.validatePassword = [
+  body("new_password")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long."),
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      let nav = await utilities.getNav();
+      res.render("account/update", {
+        errors,
+        title: "Update Password",
+        nav,
+        ...req.body,
+      });
+      return;
+    }
+    next();
+  },
+];
+
 /* ******************************
  * Check data and return errors or continue to registration
  * ***************************** */

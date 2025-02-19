@@ -33,4 +33,32 @@ router.post(
   Util.handleErrors(accountController.accountLogin)
 );
 
+// 로그아웃 라우트 추가
+router.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+      return res.redirect("/");
+    }
+    res.redirect("/"); // 홈 페이지로 리디렉션
+  });
+});
+
+// 계정 업데이트 페이지 렌더링
+router.get("/update/:id", accountController.renderUpdateView);
+
+// 계정 정보 업데이트 처리
+router.post(
+  "/update",
+  regValidate.validateUpdate,
+  accountController.updateAccount
+);
+
+// 비밀번호 변경 처리
+router.post(
+  "/change-password",
+  regValidate.validatePassword,
+  accountController.changePassword
+);
+
 module.exports = router;

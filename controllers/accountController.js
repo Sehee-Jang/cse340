@@ -151,7 +151,6 @@ async function buildManagement(req, res) {
   }
   const message = req.flash("message")[0] || "";
 
-  
   res.render("account/account", {
     title: "Hello",
     nav,
@@ -160,10 +159,94 @@ async function buildManagement(req, res) {
   });
 }
 
+async function renderUpdateView(req, res) {
+  let nav = await Util.getNav();
+  const userId = req.session.user.account_id; // 로그인된 사용자 ID 가져오기
+  console.log("✅ userId: ", userId);
+
+  if (!userId) {
+    req.flash("error", "You must be logged in.");
+    return res.redirect("/login");
+  }
+
+  try {
+    // 사용자의 ID를 이용해 데이터베이스에서 사용자 정보를 조회
+    const user = await accountModel.getAccountById(userId);
+    console.log("✅ user: ", user);
+
+    if (!user) {
+      req.flash("error", "User not found.");
+      return res.redirect("/account");
+    }
+
+    res.render("account/update", {
+      user,
+      errors: null,
+      title: "Update Account Information",
+      nav,
+      message: null,
+    });
+  } catch (error) {
+    console.error(error);
+    res.redirect("/account");
+  }
+}
+
+async function updateAccount(req, res) {
+  const { account_firstname, account_lastname, account_email, account_id } =
+    req.body;
+  try {
+    // 이메일 중복 체크
+    const existingAccount = await accountModel.getAccountByEmail(account_email);
+    if (
+      existingAccount &&
+      existingAccount.account_id !== parseInt(account_id)
+    ) {
+      req.flash("error", "Email is already in use.");
+      return res.redirect("/account/update");
+    }
+
+    // 계정 정보 업데이트 실행
+    await accountModel.updateAccount(
+      account_id,
+      account_firstname,
+      account_lastname,
+      account_email
+    );
+    req.flash("success", "Account information updated successfully.");
+    res.redirect("/account");
+  } catch (error) {
+    console.error(error);
+    req.flash("error", "An error occurred while updating account information.");
+    res.redirect("/account/update");
+  }
+}
+
+async function changePassword(req, res) {
+  const { new_password, account_id } = req.body;
+
+  try {
+    // 비밀번호 해싱
+    const hashedPassword = await bcrypt.hash(new_password, 10);
+
+    // 비밀번호 업데이트 실행
+    await accountModel.updatePassword(account_id, hashedPassword);
+    req.flash("success", "Password updated successfully.");
+    res.redirect("/account");
+  } catch (error) {
+    console.error(error);
+    req.flash("error", "An error occurred while changing the password.");
+    res.redirect("/account/update");
+  }
+}
+
 module.exports = {
   buildLogin,
   buildRegister,
   registerAccount,
   accountLogin,
   buildManagement,
+  renderUpdateView,
+  updateAccount,
+  changePassword,
 };
