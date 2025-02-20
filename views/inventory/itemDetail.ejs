@@ -28,4 +28,10 @@
       >Update Inventory</a
     >
   </div>
+
+  <!-- Q&A -->
+  <div class="questions-section">
+    <%- include('../questions/questionList', { inv_id: vehicle.inv_id,
+    questions: questions,accountData: accountData }) %>
+  </div>
 </main>

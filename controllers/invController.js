@@ -1,5 +1,7 @@
 const invModel = require("../models/inventory-model");
 const Util = require("../utilities/");
+const ReviewModel = require("../models/review-model");
+const QuestionModel = require("../models/question-model");
 
 const invCont = {};
 
@@ -38,8 +40,15 @@ invCont.buildByClassificationId = async function (req, res, next) {
  * ************************** */
 invCont.getItemDetail = async function (req, res, next) {
   try {
+    const inv_id = req.params.inv_id;
     const vehicleId = req.params.id;
     const vehicle = await invModel.getVehicleById(vehicleId);
+
+    // Fetch reviews for this vehicle
+    const reviews = await ReviewModel.getReviewsByInventory(inv_id);
+
+    // Fetch questions for this vehicle
+    const questions = await QuestionModel.getQuestionsByInventory(inv_id);
 
     if (!vehicle) {
       const error = new Error("Vehicle not found.");
@@ -55,6 +64,9 @@ invCont.getItemDetail = async function (req, res, next) {
       nav,
       vehicle,
       vehicleHTML,
+      reviews,
+      questions,
+      user: req.session.user || null,
     });
   } catch (error) {
     next(error);
@@ -120,7 +132,6 @@ invCont.addInventoryView = async (req, res) => {
   let nav = await Util.getNav();
   try {
     const classificationList = await Util.buildClassificationList();
-    console.log("📍classificationList :", classificationList);
     res.render("inventory/add-inventory", {
       title: "Add New Inventory Item",
       nav,

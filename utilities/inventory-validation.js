@@ -1,7 +1,4 @@
 function checkUpdateData(req, res, next) {
-  console.log("🔹 Middleware executed!");
-  console.log("🔹 Received Data:", req.body);
-
   const {
     inv_id,
     classification_id,
@@ -27,7 +24,6 @@ function checkUpdateData(req, res, next) {
     !inv_color
   ) {
     req.flash("error", "All fields are required.");
-    console.log("🔹 Validation Failed! Redirecting...");
     return res.redirect("/inv/edit/" + inv_id);
   }
 

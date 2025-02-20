@@ -18,7 +18,7 @@ const utilities = require("./utilities/index");
 const accountRoute = require("./routes/accountRoute");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const checkLogin = require("./utilities");
+const questionRoutes = require("./routes/questionRoute");
 
 /* ***********************
  * View Engine and Templates
@@ -30,6 +30,7 @@ app.set("layout", "./layouts/layout");
 /* ***********************
  * Middleware
  * ************************/
+
 app.use(
   session({
     store: new (require("connect-pg-simple")(session))({
@@ -43,8 +44,11 @@ app.use(
   })
 );
 
+// ✅ 로그인 상태 및 계정 정보 저장
 app.use((req, res, next) => {
   res.locals.session = req.session;
+  res.locals.loggedin = req.session.user ? true : false;
+  res.locals.accountData = req.session.user || null;
   next();
 });
 
@@ -58,8 +62,8 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
-app.use(utilities.checkJWTToken);
 
+app.use(utilities.checkJWTToken);
 /* ***********************
  * Routes
  *************************/
@@ -68,11 +72,15 @@ app.use(static);
 // Account route
 app.use("/account", accountRoute);
 
+// 질문 작성 - 로그인 필요
+app.use("/questions", utilities.checkLogin, questionRoutes);
+
+// 차량 관리 기능만 routes/inventoryRoute.js에서 관리자/직원 권한 적용
+app.use("/inv", inventoryRoute);
+
 // Index route
 app.get("/", utilities.handleErrors(baseController.buildHome));
 
-// Inventory routes
-app.use("/inv", utilities.checkAdminOrEmployee, inventoryRoute);
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
   next({ status: 404, message: "Sorry, we appear to have lost that page." });

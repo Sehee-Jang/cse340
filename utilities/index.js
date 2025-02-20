@@ -8,7 +8,7 @@ require("dotenv").config();
  ************************** */
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications();
-  console.log("data: ", data);
+
   let list = "<ul>";
   list += '<li><a href="/" title="Home page">Home</a></li>';
   data.rows.forEach((row) => {
@@ -149,7 +149,6 @@ Util.checkJWTToken = (req, res, next) => {
         }
         res.locals.accountData = accountData;
         res.locals.loggedin = 1;
-        console.log("✅ JWT 검증 성공, 로그인 상태 유지:", res.locals.loggedin);
         next();
       }
     );
@@ -164,10 +163,10 @@ Util.checkJWTToken = (req, res, next) => {
  * ************************************ */
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
-    console.log("✅ 로그인 상태 확인됨");
+    console.log("✅ Logged In");
     next();
   } else {
-    console.log("❌ 로그인 상태 아님");
+    console.log("❌ Logged out");
     req.flash("notice", "Please log in.");
     return res.redirect("/account/login");
   }
@@ -177,7 +176,11 @@ Util.checkLogin = (req, res, next) => {
  * Middleware to Check Account Type
  **************************************** */
 Util.checkAdminOrEmployee = (req, res, next) => {
-  if (res.locals.accountData && (res.locals.accountData.account_type === "Employee" || res.locals.accountData.account_type === "Admin")) {
+  if (
+    res.locals.accountData &&
+    (res.locals.accountData.account_type === "Employee" ||
+      res.locals.accountData.account_type === "Admin")
+  ) {
     next(); // 접근 허용
   } else {
     req.flash("notice", "You do not have permission to access this page.");

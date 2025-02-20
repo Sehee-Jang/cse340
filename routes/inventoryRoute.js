@@ -13,10 +13,11 @@ router.get(
 // 특정 차량 상세 정보 페이지 라우트
 router.get("/detail/:id", Util.handleErrors(invController.getItemDetail));
 
-// Route to build inventory management view
-// router.get("/inv", invController.buildInventoryManagement);
-router.get("/", invController.buildInventoryManagement);
+// ✅ 이 아래부터는 관리자/직원만 접근 가능
+router.use(Util.checkAdminOrEmployee); 
 
+// Route to build inventory management view
+router.get("/", invController.buildInventoryManagement);
 router.get("/add-classification", invController.addClassificationView);
 router.post("/add-classification", invController.addClassification);
 

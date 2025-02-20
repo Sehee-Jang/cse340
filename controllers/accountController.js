@@ -90,7 +90,6 @@ async function registerAccount(req, res) {
  *  Process login request
  * ************************************ */
 async function accountLogin(req, res) {
-  console.log("📍 Attempt Login");
   let nav = await Util.getNav();
   const { account_email, account_password } = req.body;
   const accountData = await accountModel.getAccountByEmail(account_email);
@@ -124,7 +123,6 @@ async function accountLogin(req, res) {
         });
       }
       req.session.user = accountData;
-      console.log("✅ 로그인 성공:", req.session.user);
 
       return res.redirect("/account/");
     } else {
@@ -143,7 +141,6 @@ async function accountLogin(req, res) {
 
 async function buildManagement(req, res) {
   let nav = await Util.getNav();
-  console.log("✅ 계정 페이지 접근:", req.session.user);
 
   if (!req.session.user) {
     console.log("No session - Redirecting to login page");
@@ -162,7 +159,6 @@ async function buildManagement(req, res) {
 async function renderUpdateView(req, res) {
   let nav = await Util.getNav();
   const userId = req.session.user.account_id; // 로그인된 사용자 ID 가져오기
-  console.log("✅ userId: ", userId);
 
   if (!userId) {
     req.flash("error", "You must be logged in.");
@@ -172,7 +168,6 @@ async function renderUpdateView(req, res) {
   try {
     // 사용자의 ID를 이용해 데이터베이스에서 사용자 정보를 조회
     const user = await accountModel.getAccountById(userId);
-    console.log("✅ user: ", user);
 
     if (!user) {
       req.flash("error", "User not found.");

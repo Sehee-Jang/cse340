@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="/css/question.css" />
+<div class="question-list">
+  <h2>Q&A</h2>
+
+  <ul id="question-list"></ul>
+
+  <% if (typeof user !== "undefined" && user) { %>
+
+  <form action="/questions/add" method="POST">
+    <label>Ask a Question:</label>
+    <input type="hidden" name="inv_id" value="<%= inv_id %>" />
+    <textarea name="question_text" required></textarea>
+    <br />
+    <button type="submit" class="submit-reply">Submit</button>
+  </form>
+  <% } else { %>
+  <p><a href="/login">Log in</a> to ask a question.</p>
+  <% } %>
+</div>
+
+<script src="/js/question.js"></script>
